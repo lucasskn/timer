@@ -62,7 +62,7 @@ const timing = () => {
     seconds.innerHTML = `${secondsTotal}`;
     minutes.innerHTML = `00`;
   }
-  if (minutosTotal || secondsTotal < 10) {
+  if (minutosTotal < 10) {
     minutes.innerHTML = `0${minutosTotal}`;
     seconds.innerHTML = `${secondsTotal}`;
     if (secondsTotal < 10) {
@@ -77,11 +77,13 @@ const timing = () => {
     timeCounter--;
     return timing();
   }, 1000);
+
   console.log(timeCounter);
   console.log(`minutos: ${minutosTotal} segundos: ${secondsTotal} total: ${timeCounter}`);
 
   controls.active();
-  if (minutosTotal || secondsTotal == 0) {
+
+  if (minutosTotal === 0 && secondsTotal === 0) {
     controls.stopEvent();
   }
 };
