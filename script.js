@@ -32,6 +32,12 @@ const controls = {
     controls.play.classList.remove("hide");
     controls.pause.classList.add("hide");
   },
+  default() {
+    controls.play.classList.remove("hide");
+    controls.set.classList.remove("hide");
+    controls.pause.classList.add("hide");
+    controls.stop.classList.add("hide");
+  },
 };
 
 function setTiming() {
@@ -41,24 +47,36 @@ function setTiming() {
   return setTimeout(timing, 1000);
 }
 
+let timetotal;
+let minutosTotal;
+let secondsTotal;
+
 const timing = () => {
-  if (timeCounter > 59) {
-    timeCounter = tempo / 60;
-    minutes.innerHTML = `0${timeCounter}`;
-  } else if (timeCounter > 9) {
-    seconds.innerHTML = `${timeCounter}`;
-  } else if (timeCounter < 59) {
-    timeCounter = tempo / timeCounter - 1;
-    seconds.innerHTML = `${timeCounter}`;
-    if (tempo / 60 < timeCounter) {
-      minutes.innerHTML = `0${Math.round(timeCounter) / 60}`;
+  minutosTotal = Math.floor(timeCounter / 60);
+  secondsTotal = Math.floor(timeCounter % 60);
+  if (timeCounter <= secondsTotal) {
+    minutes.innerHTML = `${minutosTotal}`;
+    seconds.innerHTML = `${secondsTotal}`;
+  }
+  if (secondsTotal || minutosTotal <= 0) {
+    seconds.innerHTML = `${secondsTotal}`;
+    minutes.innerHTML = `00`;
+  }
+  if (minutosTotal || secondsTotal < 10) {
+    minutes.innerHTML = `0${minutosTotal}`;
+    seconds.innerHTML = `${secondsTotal}`;
+    if (secondsTotal < 10) {
+      seconds.innerHTML = `0${secondsTotal}`;
     }
-    minutes.innerHTML = `0${Math.round(timeCounter / 60)}`;
-  } else {
-    seconds.innerHTML = `0${timeCounter}`;
+    if (secondsTotal < 0) {
+      seconds.innerHTML = `0${secondsTotal}`;
+    }
   }
   timeCounter--;
   timeoutID = setTimeout(timing, 1000);
+  console.log(timeCounter);
+  console.log(`minutos: ${minutosTotal} segundos: ${secondsTotal} total: ${timeCounter}`);
+
   controls.active();
 };
 
@@ -66,13 +84,24 @@ const showTime = () => {
   tempo = prompt("?");
 
   timeCounter = tempo;
-  if (timeCounter > 59) {
-    timeCounter = tempo / 60;
-    minutes.innerHTML = `0${timeCounter}`;
-  } else if (timeCounter > 9) {
-    seconds.innerHTML = `${timeCounter}`;
-  } else {
-    seconds.innerHTML = `0${timeCounter}`;
+  minutosTotal = Math.floor(timeCounter / 60);
+  secondsTotal = timeCounter % 60;
+
+  console.log(`minutos: ${minutosTotal} segundos: ${secondsTotal} total: ${timeCounter}`);
+
+  if (secondsTotal < 59) {
+    if (minutosTotal || secondsTotal > 9) {
+      minutes.innerHTML = `${minutosTotal}`;
+      seconds.innerHTML = `0${secondsTotal}`;
+    }
+    if (secondsTotal > 9) {
+      seconds.innerHTML = `${secondsTotal}`;
+    } else {
+      seconds.innerHTML = `0${secondsTotal}`;
+    }
+  }
+  if (minutosTotal < 9) {
+    minutes.innerHTML = `0${minutosTotal}`;
   }
 };
 
